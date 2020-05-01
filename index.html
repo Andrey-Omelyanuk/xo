@@ -7,86 +7,138 @@
   <meta name="description" content="The HTML5 Herald">
   <meta name="author" content="SitePoint">
 
-  <!--link rel="stylesheet" href="css/styles.css?v=1.0"-->
+  <link rel="stylesheet" href="styles.css">
 
 </head>
 <body style="margin: 0">
-    <div style="width: 100vw; height: 100vh; margin: 0; display: flex;">
-        <div style="height: 100%; width: 30%;"></div>
+    <style>
+        #app-xo {
+             width: 100vw; height: 100vh; margin: 0; display: flex;
+        }
+        #chat {
+            height: 100%; width: 30%;
+        }
+        .footer {
+            min-height: 100px; 
+            display: flex;
+            flex-direction: column;
+        }
+        .footer > div {
+            flex: 1; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+        }
+        .footer button {
+            width: 80%; 
+            height: 80%;
+        }
+        .row {
+            display: flex; 
+            flex-direction: row;
+        }
+        .cell {
+            width: 100px; 
+            height: 100px; 
+            border: 1px solid black; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+        }
+        .cell-winner {
+            background-color: pink; 
+        }
+        .field {
+            flex:auto; 
+            border-top: 1px solid black; 
+            border-bottom: 1px solid black; 
+            display: flex; 
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        #dashboard {
+            height: 100%; width: 30%;
+        }
+        #container {
+            height: 100%; min-width: 500px; width: 40%; display: flex; flex-direction: column
+        }
+        .header {
+            min-height: 100px; display: flex
+        }
+        .header .user {
+            flex: 1; display: flex; flex-direction: column; padding: 10px;
+        }
+        .header .user-name {
+            height: 40px; display: flex; 
+        }
+        .header .user-type {
+            width: 40px; display: flex; justify-content: center; align-items: center; border-right: 1px solid black;
+        }
+        .header .user-name .name {
+            flex: auto; display: flex; justify-content: flex-start; align-items: center; padding: 0 10px; 
+        }
+        .header .score {
+             height: 40px; display: flex; justify-content: center; align-items: center; border-top: 1px solid black;
+        }
+    </style>
+    <div id="app-xo">
+        <div id="dashboard" ></div>
         
-        <div style="height: 100%; min-width: 500px; width: 40%; display: flex; flex-direction: column">
-            <div style="min-height: 100px; display: flex">
-                <div style="flex: 1; display: flex; flex-direction: column; padding: 10px;">
-                    <div style="height: 40px; display: flex; ">
-                        <div style="width: 40px; display: flex; justify-content: center; align-items: center; border-right: 1px solid black;" >
+        <div id="container" >
+            <div class="header" >
+                <div class="user" >
+                    <div class="user-name" >
+                        <div class="user-type" >
                             <div> O </div>
                         </div>
-                        <div style="flex: auto; display: flex; justify-content: flex-start; align-items: center; padding: 0 10px; ">
+                        <div class="name" >
                             <div> Andrey </div>
                         </div>
                     </div>
-                    <div style="height: 40px; display: flex; justify-content: center; align-items: center; border-top: 1px solid black;">
+                    <div class="score">
                         <div>10</div>
                     </div>
                 </div>
-                <div style="flex: 1; display: flex; flex-direction: column; padding: 10px;">
-                    <div style="height: 40px; display: flex; ">
-                        <div style="width: 40px; display: flex; justify-content: center; align-items: center; border-right: 1px solid black;" >
+                <div class="user" >
+                    <div class="user-name" >
+                        <div class="user-type" >
                             <div> X </div>
                         </div>
-                        <div style="flex: auto; display: flex; justify-content: flex-start; align-items: center; padding: 0 10px; ">
+                        <div class="name" >
                             <div> Superman </div>
                         </div>
                     </div>
-                    <div style="height: 40px; display: flex; justify-content: center; align-items: center; border-top: 1px solid black;">
+                    <div class="score">
                         <div>0</div>
                     </div>
                 </div>
             </div>
-            
-            
-            <div style="flex:auto; border-top: 1px solid black; border-bottom: 1px solid black; display: flex; justify-content: center; align-items: center; flex-direction: column;">
-                <div style="display: flex; flex-direction: row;">
-                    <div style="width: 100px; height: 100px; ba; border: 1px solid black; background-color: pink; display: flex; justify-content: center; align-items: center;">
-                        <div> X </div>
-                    </div>
-                    <div style="width: 100px; height: 100px; ba; border: 1px solid black; display: flex; justify-content: center; align-items: center;"></div>
-                    <div style="width: 100px; height: 100px; ba; border: 1px solid black; display: flex; justify-content: center; align-items: center;"></div>
+            <div class="field">
+                <div class="row">
+                    <div class="cell cell-winner"><div> X </div></div>
+                    <div class="cell"><div> </div></div>
+                    <div class="cell"><div> </div></div>
                 </div>
-                 <div style="display: flex; flex-direction: row;">
-                    <div style="width: 100px; height: 100px; ba; border: 1px solid black; display: flex; justify-content: center; align-items: center;"></div>
-                    <div style="width: 100px; height: 100px; ba; border: 1px solid black; background-color: pink; display: flex; justify-content: center; align-items: center;">
-                        <div> X </div>
-                    </div>
-                    <div style="width: 100px; height: 100px; ba; border: 1px solid black; display: flex; justify-content: center; align-items: center;"></div>
+                 <div class="row">
+                    <div class="cell"><div> </div></div>
+                    <div class="cell cell-winner"><div> X </div></div>
+                    <div class="cell"><div> </div></div>
                 </div>
-                 <div style="display: flex; flex-direction: row;">
-                    <div style="width: 100px; height: 100px; ba; border: 1px solid black; display: flex; justify-content: center; align-items: center;">
-                        <div> O </div> 
-                    </div>
-                    <div style="width: 100px; height: 100px; ba; border: 1px solid black; display: flex; justify-content: center; align-items: center;">
-                        <div> O </div>
-                    </div>
-                    <div style="width: 100px; height: 100px; ba; border: 1px solid black; background-color: pink; display: flex; justify-content: center; align-items: center;">
-                        <div> X </div>
-                    </div>
+                 <div class="row">
+                    <div class="cell"><div> O </div></div>
+                    <div class="cell"><div> O </div></div>
+                    <div class="cell cell-winner"><div> X </div></div>
                 </div>
      
             </div>
-            
-            
-            <div style="min-height: 100px; display: flex; flex-direction: column;">
-                <div style="flex: 1; display: flex; justify-content: center; align-items: center;">
-                    <div> Ходит Х  </div>
-                </div>
-                <div style='flex: 1; display: flex; justify-content: center; align-items: center;'>
-                    <button style="width: 80%; height: 80%;"> Заново / Сдаться </button>
-                </div>
-                
+            <div class="footer" >            
+                <div><div> Ходит Х </div></div>
+                <div><button > Заново / Сдаться </button></div>
             </div>
         </div>
         
-        <div style="height: 100%; width: 30%;"></div>
+        <div id="chat" ></div>
     </div>
  
   <!--script src="js/scripts.js"></script-->
