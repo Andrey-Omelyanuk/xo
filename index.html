@@ -71,7 +71,20 @@
         
         <div id="chat" ></div>
     </div>
- 
-  <!--script src="js/scripts.js"></script-->
+    <script src="jquery.js"></script>
+    <script>
+        $(function() {
+            $(".cell").hover( 
+                function() { $(this).addClass('hover') },
+                function() { $(this).removeClass('hover') }
+            )
+            
+            $(".cell").click(
+                function() { 
+                    console.log(this)
+                }
+            )
+        })
+    </script> 
 </body>
 </html>
