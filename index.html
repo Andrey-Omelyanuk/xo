@@ -23,49 +23,40 @@
                         <div class="user-type" >
                             <div> O </div>
                         </div>
-                        <div class="name" >
-                            <div> Andrey </div>
-                        </div>
+                        <div class="name name_o"></div>
                     </div>
-                    <div class="score">
-                        <div>10</div>
-                    </div>
+                    <div class="score score_o"></div>
                 </div>
                 <div class="user" >
                     <div class="user-name" >
                         <div class="user-type" >
                             <div> X </div>
                         </div>
-                        <div class="name" >
-                            <div> Superman </div>
-                        </div>
+                        <div class="name name_x" ></div>
                     </div>
-                    <div class="score">
-                        <div>0</div>
-                    </div>
+                    <div class="score score_x"></div>
                 </div>
             </div>
             <div class="field">
                 <div class="row">
-                    <div class="cell cell-winner"><div> X </div></div>
-                    <div class="cell"><div> </div></div>
-                    <div class="cell"><div> </div></div>
+                    <div class="cell"></div>
+                    <div class="cell"></div>
+                    <div class="cell"></div>
                 </div>
                  <div class="row">
-                    <div class="cell"><div> </div></div>
-                    <div class="cell cell-winner"><div> X </div></div>
-                    <div class="cell"><div> </div></div>
+                    <div class="cell"></div>
+                    <div class="cell"></div>
+                    <div class="cell"></div>
                 </div>
                  <div class="row">
-                    <div class="cell"><div> O </div></div>
-                    <div class="cell"><div> O </div></div>
-                    <div class="cell cell-winner"><div> X </div></div>
+                    <div class="cell"></div>
+                    <div class="cell"></div>
+                    <div class="cell"></div>
                 </div>
-     
             </div>
             <div class="footer" >            
-                <div><div> Ходит Х </div></div>
-                <div><button > Заново / Сдаться </button></div>
+                <div class="state"></div>
+                <div><button class="reset"> Заново </button></div>
             </div>
         </div>
         
@@ -73,7 +64,141 @@
     </div>
     <script src="jquery.js"></script>
     <script>
+        let game = {
+            gamers: {
+                o: {
+                    name: 'Andrey',
+                    score: 0
+                },
+                x: {
+                    name: 'Superman',
+                    score: 0
+                }
+            },
+            field: [
+                ['', '', ''],
+                ['', '', ''],
+                ['', '', ''],
+            ],
+            state: 'x',
+            // прочерк это ничья
+            winner: '',
+          
+            win_templates: [
+                [
+                    ['1', '', ''],
+                    [ '','1', ''],
+                    [ '', '','1']
+                ],
+                [
+                    [ '', '','1'],
+                    [ '','1', ''],
+                    ['1', '', '']
+                ],
+                [
+                    ['1','1','1'],
+                    [ '', '', ''],
+                    [ '', '', '']
+                ],
+            ],
+            match_template: function(template, player) {
+                for(var y = 0; y < this.field.length; y++) {
+                    for(var x = 0; x < this.field[y].length; x++) {
+                        if (template[y][x] == '1') {
+                            if(this.field[y][x] != player) {
+                               return false 
+                            }
+                        }
+                    }
+                }
+                return true
+            },
+            check_winner: function() {
+                for(var template of this.win_templates) {
+                   if (this.match_template(template, 'o')) {
+                       this.winner = 'o'
+                       this.gamers.o.score++
+                       return
+                   }
+                   if (this.match_template(template, 'x')) {
+                       this.winner = 'x'
+                       this.gamers.x.score++
+                       return
+                   }
+                }
+            },
+            
+            do: function(coordinates) {
+                let x = coordinates[0]
+                let y = coordinates[1]
+                
+                if (this.field[y][x] == '') {
+                    this.field[y][x] = this.state 
+                    this.check_winner()         
+                    this.state = this.state == 'x' ? 'o' : 'x'
+                    this.update_html()
+                }
+            },
+            update_html: function() {
+                // отрисовка поля
+                var cells = $(".cell")
+                for(var y = 0; y < this.field.length; y++) {
+                    for(var x = 0; x < this.field[y].length; x++) {
+                        $(cells[convert_to_1D(x, y, 3)]).text(this.field[y][x])
+                    }
+                }
+                // отрисовка состояния
+                var el_state = $('.state')
+                var el_reset = $('.reset')
+                if (this.winner == '') {
+                    el_state.text('Ход ' + this.state)    
+                    el_reset.hide()
+                }
+                else if (this.winner == '-') {
+                    el_state.text('Ничья')
+                    el_reset.show()
+                }
+                else {
+                    el_state.text('Выиграл ' + this.winner)
+                    el_reset.show()
+                }
+                // отрисовка играков
+                $('.name_o').text(this.gamers.o.name)
+                $('.name_x').text(this.gamers.x.name)
+                $('.score_o').text(this.gamers.o.score)
+                $('.score_x').text(this.gamers.x.score)
+                
+            },
+            reset: function() {
+                var gamer_o = this.gamers.o
+                this.gamers.o = this.gamers.x
+                this.gamers.x = gamer_o
+                this.field = [
+                    ['', '', ''],
+                    ['', '', ''],
+                    ['', '', ''],
+                ]
+                this.state = 'x'
+                this.winner = ''
+                this.update_html()    
+            }
+        }
+        
+        function convert_to_1D(x, y, max_x) {
+            var index = y * max_x + x
+            return index
+        }
+        function convert_to_2D(index, max_x) {
+            var x = index % max_x
+            var y = Math.floor(index/max_x)
+            return [x, y]
+        }
+        
+        // 1. игроки
+        // 2. ировое поле
+        // 3. состояние
         $(function() {
+            game.update_html()
             $(".cell").hover( 
                 function() { $(this).addClass('hover') },
                 function() { $(this).removeClass('hover') }
@@ -81,9 +206,14 @@
             
             $(".cell").click(
                 function() { 
-                    console.log(this)
+                    var index = $(".cell").index(this)
+                    game.do(convert_to_2D(index, 3, 3))
                 }
             )
+            
+            $(".reset").click(function(){
+                game.reset()
+            })
         })
     </script> 
 </body>
