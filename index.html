@@ -194,6 +194,7 @@
                         ){
                             cell.addClass('cell-winner')
                         }
+                       
                         else {
                             cell.removeClass('cell-winner')
                         }
@@ -256,7 +257,11 @@
                 function() { $(this).addClass('hover') },
                 function() { $(this).removeClass('hover') }
             )
-            
+            $(".user" ).hover( 
+                function() { $(this).addClass('hover') },
+                function() { $(this).removeClass('hover') }
+            )
+          
             $(".cell").click(
                 function() { 
                     var index = $(".cell").index(this)
