@@ -59,7 +59,10 @@
 .header .user-name {
     height: 40px; display: flex; 
 }
-.header .user-type {
+.header .user-type-x {
+    width: 40px; display: flex; justify-content: center; align-items: center; border-right: 1px solid black;
+}
+.header .user-type-o {
     width: 40px; display: flex; justify-content: center; align-items: center; border-right: 1px solid black;
 }
 .header .user-name .name {

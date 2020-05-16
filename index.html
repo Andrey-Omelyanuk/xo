@@ -20,7 +20,7 @@
             <div class="header" >
                 <div class="user" >
                     <div class="user-name" >
-                        <div class="user-type" >
+                        <div class="user-type-o" >
                             <div> O </div>
                         </div>
                         <div class="name name_o"></div>
@@ -29,7 +29,7 @@
                 </div>
                 <div class="user" >
                     <div class="user-name" >
-                        <div class="user-type" >
+                        <div class="user-type-x" >
                             <div> X </div>
                         </div>
                         <div class="name name_x" ></div>
@@ -198,9 +198,31 @@
                         else {
                             cell.removeClass('cell-winner')
                         }
+                      
                         
                     }
                 }
+                if(this.winner == 'x'){
+                    $('.name_x').addClass('cell-winner')
+                    $('.score_x').addClass('cell-winner')
+                    $('.user-type-x').addClass('cell-winner')
+                }
+                else if (this.winner == 'o'){
+                    $('.name_o').addClass('cell-winner')
+                    $('.score_o').addClass('cell-winner')
+                    $('.user-type-o').addClass('cell-winner')
+                }
+                else{
+                    $('.name_o').removeClass('cell-winner')
+                    $('.name_x').removeClass('cell-winner')
+                    $('.score_o').removeClass('cell-winner')
+                    $('.score_x').removeClass('cell-winner')
+                    $('.user-type-o').removeClass('cell-winner')
+                    $('.user-type-x').removeClass('cell-winner')
+                }
+                                
+
+              
                 // отрисовка состояния
                 var el_state = $('.state')
                 var el_reset = $('.reset')
