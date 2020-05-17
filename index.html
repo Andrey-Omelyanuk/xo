@@ -57,6 +57,7 @@
             <div class="footer" >            
                 <div class="state"></div>
                 <div><button class="reset"> Заново </button></div>
+                <div><button class="reset1"> Свободные ячейки </button></div>
             </div>
         </div>
         
@@ -277,6 +278,19 @@
             
             $(".reset").click(function(){
                 game.reset()
+            })
+            $(".reset1").click(function(){
+                var cells = $(".cell")
+                for(var y = 0; y < game.field.length; y++) {
+                    for(var x = 0; x < game.field[y].length; x++) {
+                        var cell = $(cells[convert_to_1D(x, y, 3)])
+                       
+                        if(game.field[y][x]==""){
+                             cell.addClass("hover")
+                        }
+                    }
+                }
+                
             })
         })
     </script> 
