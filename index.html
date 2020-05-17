@@ -189,13 +189,19 @@
                         cell.text(this.field[y][x])
                         if( // если у нас есть победитель 
                             (this.winner == 'x' || this.winner == 'o')
-                            // и эта ячейка по шаблону выиграла
-                          && this.win_template[y][x] == '1'
                         ){
-                            cell.addClass('cell-winner')
+                            // и эта ячейка по шаблону выиграла
+                            if( this.win_template[y][x] == '1'){
+                                cell.addClass('cell-winner')
+                            }
+                            else{
+                                cell.addClass('cell-winner1')
+                            }
+                      
                         }
                         else {
                             cell.removeClass('cell-winner')
+                            cell.removeClass('cell-winner1')
                         }
                         
                     }

@@ -35,6 +35,11 @@
 .cell-winner {
     background-color: pink; 
 }
+.cell-winner1 {
+    background-color:gray; 
+}
+
+
 .field {
     flex:auto; 
     border-top: 1px solid black; 
