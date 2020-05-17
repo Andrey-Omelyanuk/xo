@@ -57,7 +57,9 @@
             <div class="footer" >            
                 <div class="state"></div>
                 <div><button class="reset"> Заново </button></div>
+                <div><button class="check-cells"> Показать занятые клетки </button></div>
             </div>
+			
         </div>
         
         <div id="chat" ></div>
@@ -209,9 +211,7 @@
                        
                         else {
                             cell.removeClass('cell-other')
-                        }
-                      
-                        
+                        }  
                     }
                 }
                 if(this.winner == 'x'){
@@ -267,6 +267,28 @@
                 this.state = 'x'
                 this.winner = ''
                 this.update_html()    
+            },
+			
+            check_cells: function(){
+				var cells = $(".cell")
+                for(var y = 0; y < this.field.length; y++) {
+                    for(var x = 0; x < this.field[y].length; x++) {
+                        var cell = $(cells[convert_to_1D(x, y, 3)])
+						
+                        cell.text(this.field[y][x])
+						
+					    if(this.field[y][x] == 'x'){
+					    	cell.addClass('cell-other')
+						}
+						else if(this.field[y][x] == 'o'){
+					    	cell.addClass('cell-other')
+						}
+						else{
+							cell.removeClass('cell-other')
+							cell.removeClass('cell-winner')
+						}
+					}
+				}
             }
         }
         
@@ -303,6 +325,10 @@
             
             $(".reset").click(function(){
                 game.reset()
+            })
+			
+			$(".check-cells").click(function(){
+                game.check_cells()
             })
         })
     </script> 
