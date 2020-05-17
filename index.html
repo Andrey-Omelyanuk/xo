@@ -199,6 +199,18 @@
                             cell.removeClass('cell-winner')
                         }
                       
+                        if( // если у нас есть победитель 
+                            (this.winner == 'x' || this.winner == 'o')
+                            // и эта ячейка по шаблону выиграла
+                          && this.win_template[y][x] != '1'
+                        ){
+                            cell.addClass('cell-other')
+                        }
+                       
+                        else {
+                            cell.removeClass('cell-other')
+                        }
+                      
                         
                     }
                 }
@@ -220,9 +232,7 @@
                     $('.user-type-o').removeClass('cell-winner')
                     $('.user-type-x').removeClass('cell-winner')
                 }
-                                
-
-              
+               
                 // отрисовка состояния
                 var el_state = $('.state')
                 var el_reset = $('.reset')
