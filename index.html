@@ -2,20 +2,21 @@
 
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>XO</title>
-  <meta name="description" content="The HTML5 Herald">
-  <meta name="author" content="SitePoint">
+    <meta charset="utf-8">
+    <title>XO</title>
+    <meta name="description" content="The HTML5 Herald">
+    <meta name="author" content="SitePoint">
 
-  <link rel="stylesheet" href="styles.css">
-
+    <link rel="stylesheet" href="styles.css">
+    <script src="jquery.js"></script>
+    <script src="game.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
 <body style="margin: 0">
     <style>
     </style>
     <div id="app-xo">
         <div id="dashboard" ></div>
-        
         <div id="container" >
             <div class="header" >
                 <div class="user" >
@@ -23,250 +24,67 @@
                         <div class="user-type" >
                             <div> O </div>
                         </div>
-                        <div class="name name_o"></div>
+                        <div class="name name_o"> {{ game.gamers.o.name }} </div>
                     </div>
-                    <div class="score score_o"></div>
+                    <div class="score score_o"> {{ game.gamers.o.score }}</div>
                 </div>
                 <div class="user" >
                     <div class="user-name" >
                         <div class="user-type" >
                             <div> X </div>
                         </div>
-                        <div class="name name_x" ></div>
+                        <div class="name name_x" >{{ game.gamers.x.name }}</div>
                     </div>
-                    <div class="score score_x"></div>
+                    <div class="score score_x"> {{ game.gamers.x.score }}</div>
                 </div>
             </div>
             <div class="field">
-                <div class="row">
-                    <div class="cell"></div>
-                    <div class="cell"></div>
-                    <div class="cell"></div>
-                </div>
-                 <div class="row">
-                    <div class="cell"></div>
-                    <div class="cell"></div>
-                    <div class="cell"></div>
-                </div>
-                 <div class="row">
-                    <div class="cell"></div>
-                    <div class="cell"></div>
-                    <div class="cell"></div>
+                <div v-for="(row, y) of game.field" class="row">
+                    <div v-for="(cell, x) of row" class="cell"
+                        :class="{
+                            'cell-winner': isCellWinner(x,y), 
+                            'cell-other' : isCellNotWinner(x,y) 
+                        }"
+                        @mouseover="mouseOver" 
+                        @mouseout="mouseOut" 
+                        @click="next_step"
+                        :x="x"
+                        :y="y"
+                    >{{cell}}</div>
                 </div>
             </div>
             <div class="footer" >            
-                <div class="state"></div>
-                <div><button class="reset"> Заново </button></div>
+                <div v-if     ="game.winner ==  ''" class="state"> Ход {{game.state}}</div>
+                <div v-else-if="game.winner == '-'" class="state"> Ничья </div>
+                <div v-else                         class="state"> Выиграл {{game.winner}}</div>
+
+                <div v-if="game.winner != ''"><button @click="game.reset()" class="reset"> Заново </button></div>
             </div>
         </div>
-        
         <div id="chat" ></div>
     </div>
-    <script src="jquery.js"></script>
     <script>
-        let game = {
-            gamers: {
-                o: {
-                    name: 'Andrey',
-                    score: 0
+        var app = new Vue({
+            el: '#container',
+            data: {
+                game: game
+            },
+            methods: {
+                mouseOver: function(event) { $(event.currentTarget).addClass('hover') },
+                mouseOut : function(event) { $(event.currentTarget).removeClass('hover') },
+                next_step: function(event) {
+                    game.do([
+                        event.currentTarget.attributes.x.value,
+                        event.currentTarget.attributes.y.value
+                    ])
                 },
-                x: {
-                    name: 'Superman',
-                    score: 0
-                }
+                isCellWinner: function(x,y) { 
+                    return (this.game.winner == 'x' || this.game.winner == 'o') && this.game.win_template[y][x] == '1'
+                },
+                isCellNotWinner: function(x,y) { 
+                    // TODO: 
+                },
             },
-            field: [
-                ['', '', ''],
-                ['', '', ''],
-                ['', '', ''],
-            ],
-            state: 'x',
-            // прочерк это ничья
-            winner: '',
-            // какой шаблон выиграл
-            win_template: null,
-            
-            win_templates: [
-                [
-                    ['1', '', ''],
-                    [ '','1', ''],
-                    [ '', '','1']
-                ],
-                [
-                    [ '', '','1'],
-                    [ '','1', ''],
-                    ['1', '', '']
-                ],
-                [
-                    ['1','1','1'],
-                    [ '', '', ''],
-                    [ '', '', '']
-                ],
-                [
-                    [ '', '', ''],
-                    ['1','1','1'],
-                    [ '', '', '']
-                ],
-                [
-                    [ '', '', ''],
-                    [ '', '', ''],
-                    ['1','1','1']
-                ],
-                [
-                    ['1', '', ''],
-                    ['1', '', ''],
-                    ['1', '', '']
-                ],
-                [
-                    [ '','1', ''],
-                    [ '','1', ''],
-                    [ '','1', '']
-                ],
-                [
-                    [ '', '','1'],
-                    [ '', '','1'],
-                    [ '', '','1']
-                ],
-            ],
-            match_template: function(template, player) {
-                for(var y = 0; y < this.field.length; y++) {
-                    for(var x = 0; x < this.field[y].length; x++) {
-                        if (template[y][x] == '1') {
-                            if(this.field[y][x] != player) {
-                               return false 
-                            }
-                        }
-                    }
-                }
-                return true
-            },
-            check_winner: function() {
-                for(var template of this.win_templates) {
-                   if (this.match_template(template, 'o')) {
-                       this.win_template = template
-                       this.winner = 'o'
-                       this.gamers.o.score++
-                       return
-                   }
-                   if (this.match_template(template, 'x')) {
-                       this.win_template = template
-                       this.winner = 'x'
-                       this.gamers.x.score++
-                       return
-                   }
-                }
-                // ничья
-                for(var y = 0; y < this.field.length; y++) {
-                    for(var x = 0; x < this.field[y].length; x++) {
-                        if (this.field[y][x] == ''){
-                            return
-                        }
-                    }
-                }
-               this.winner = '-'
-            },
-            
-            do: function(coordinates) {
-                if(this.winner != '')
-                    return
-                    
-                let x = coordinates[0]
-                let y = coordinates[1]
-                
-                if (this.field[y][x] == '') {
-                    this.field[y][x] = this.state 
-                    this.check_winner()         
-                    this.state = this.state == 'x' ? 'o' : 'x'
-                    this.update_html()
-                }
-            },
-            update_html: function() {
-                // отрисовка поля
-                var cells = $(".cell")
-                for(var y = 0; y < this.field.length; y++) {
-                    for(var x = 0; x < this.field[y].length; x++) {
-                        var cell = $(cells[convert_to_1D(x, y, 3)])
-                        cell.text(this.field[y][x])
-                        if( // если у нас есть победитель 
-                            (this.winner == 'x' || this.winner == 'o')
-                            // и эта ячейка по шаблону выиграла
-                          && this.win_template[y][x] == '1'
-                        ){
-                            cell.addClass('cell-winner')
-                        }
-                        else {
-                            cell.removeClass('cell-winner')
-                        }
-                        
-                    }
-                }
-                // отрисовка состояния
-                var el_state = $('.state')
-                var el_reset = $('.reset')
-                if (this.winner == '') {
-                    el_state.text('Ход ' + this.state)    
-                    el_reset.hide()
-                }
-                else if (this.winner == '-') {
-                    el_state.text('Ничья')
-                    el_reset.show()
-                }
-                else {
-                    el_state.text('Выиграл ' + this.winner)
-                    el_reset.show()
-                }
-                // отрисовка играков
-                $('.name_o').text(this.gamers.o.name)
-                $('.name_x').text(this.gamers.x.name)
-                $('.score_o').text(this.gamers.o.score)
-                $('.score_x').text(this.gamers.x.score)
-                
-            },
-            reset: function() {
-                var gamer_o = this.gamers.o
-                this.gamers.o = this.gamers.x
-                this.gamers.x = gamer_o
-                this.field = [
-                    ['', '', ''],
-                    ['', '', ''],
-                    ['', '', ''],
-                ]
-                this.state = 'x'
-                this.winner = ''
-                this.update_html()    
-            }
-        }
-        
-        function convert_to_1D(x, y, max_x) {
-            var index = y * max_x + x
-            return index
-        }
-        function convert_to_2D(index, max_x) {
-            var x = index % max_x
-            var y = Math.floor(index/max_x)
-            return [x, y]
-        }
-        
-        // 1. игроки
-        // 2. ировое поле
-        // 3. состояние
-        $(function() {
-            game.update_html()
-            $(".cell").hover( 
-                function() { $(this).addClass('hover') },
-                function() { $(this).removeClass('hover') }
-            )
-            
-            $(".cell").click(
-                function() { 
-                    var index = $(".cell").index(this)
-                    game.do(convert_to_2D(index, 3, 3))
-                }
-            )
-            
-            $(".reset").click(function(){
-                game.reset()
-            })
         })
     </script> 
 </body>
