@@ -19,7 +19,7 @@
         <div id="dashboard" ></div>
         <div id="container" >
             <div class="header" >
-                <div class="user" >
+                <div class="user">
                     <div class="user-name" >
                         <div class="user-type" >
                             <div> O </div>
@@ -28,14 +28,14 @@
                     </div>
                     <div class="score score_o"> {{ game.gamers.o.score }}</div>
                 </div>
-                <div class="user" >
-                    <div class="user-name" >
+                <div class="user">
+                      <div class="user-name" >
                         <div class="user-type" >
                             <div> X </div>
                         </div>
                         <div class="name name_x" >{{ game.gamers.x.name }}</div>
-                    </div>
-                    <div class="score score_x"> {{ game.gamers.x.score }}</div>
+                       </div>
+                       <div class="score score_x"> {{ game.gamers.x.score }}</div>
                 </div>
             </div>
             <div class="field">
@@ -82,7 +82,7 @@
                     return (this.game.winner == 'x' || this.game.winner == 'o') && this.game.win_template[y][x] == '1'
                 },
                 isCellNotWinner: function(x,y) { 
-                    // TODO: 
+                    return (this.game.winner == 'x' || this.game.winner == 'o') && this.game.win_template[y][x] != '1'
                 },
             },
         })
