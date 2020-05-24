@@ -19,7 +19,7 @@
         <div id="dashboard" ></div>
         <div id="container" >
             <div class="header" >
-                <div class="user">
+                <div class="user" @mouseover="mouseOver" @mouseout="mouseOut" >
                     <div class="user-name" >
                         <div class="user-type" >
                             <div> O </div>
@@ -28,7 +28,7 @@
                     </div>
                     <div class="score score_o"> {{ game.gamers.o.score }}</div>
                 </div>
-                <div class="user">
+                <div class="user" @mouseover="mouseOver" @mouseout="mouseOut">
                       <div class="user-name" >
                         <div class="user-type" >
                             <div> X </div>

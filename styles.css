@@ -72,6 +72,6 @@
      height: 40px; display: flex; justify-content: center; align-items: center; border-top: 1px solid black;
 }
 
-.cell.hover {
+.hover {
     background-color: lightgrey;
 }
