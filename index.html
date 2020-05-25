@@ -19,7 +19,7 @@
         <div id="dashboard" ></div>
         <div id="container" >
             <div class="header" >
-                <div class="user_o" @mouseover="mouseOver" @mouseout="mouseOut" >
+                <div class="user" @mouseover="mouseOver" @mouseout="mouseOut" :class = "{'cell-winner': isWinner('o')}">
                     <div class="user-name" >
                         <div class="user-type" >
                             <div> O </div>
@@ -28,7 +28,7 @@
                     </div>
                     <div class="score score_o"> {{ game.gamers.o.score }}</div>
                 </div>
-                <div class="user_x" @mouseover="mouseOver" @mouseout="mouseOut">
+                <div class="user" @mouseover="mouseOver" @mouseout="mouseOut" :class ="{'cell-winner': isWinner('x')}">
                       <div class="user-name" >
                         <div class="user-type" >
                             <div> X </div>
@@ -71,7 +71,8 @@
             el: '#container',
             data: {
                 game: game,
-                isHighlight: false
+                isHighlight: false,
+                isHighlightName: false
             },
             methods: {
                 mouseOver: function(event) { $(event.currentTarget).addClass('hover') },
@@ -91,12 +92,19 @@
                 },
                 isCheckCells: function(x,y) {
                     if(this.isHighlight == true){
-                     return(this.game.field[y][x] == 'x' || this.game.field[y][x] == 'o')}
+                     return(this.game.field[y][x] == 'x' || this.game.field[y][x] == 'o')
+                    }
                     return false
                 },
                 showTakenCells: function() {
                     this.isHighlight = true
-                }
+                },
+                isWinner: function(gamer){
+                    if(gamer == 'x'){
+                     return this.game.winner == 'x'
+                    }
+                    return this.game.winner == 'o'
+                },
             },
         })
     </script> 
