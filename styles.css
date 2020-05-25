@@ -38,6 +38,12 @@
 .cell-other {
     background-color: grey; 
 }
+.cell-highlight {
+    background-color: lightblue;
+}
+.user-winner{
+    background-color: pink;
+}
 .field {
     flex:auto; 
     border-top: 1px solid black; 
@@ -56,7 +62,10 @@
 .header {
     min-height: 100px; display: flex
 }
-.header .user {
+.header .user_o {
+    flex: 1; display: flex; flex-direction: column; padding: 10px;
+}
+.header .user_x {
     flex: 1; display: flex; flex-direction: column; padding: 10px;
 }
 .header .user-name {

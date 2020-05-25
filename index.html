@@ -19,7 +19,7 @@
         <div id="dashboard" ></div>
         <div id="container" >
             <div class="header" >
-                <div class="user" @mouseover="mouseOver" @mouseout="mouseOut" >
+                <div class="user_o" @mouseover="mouseOver" @mouseout="mouseOut" >
                     <div class="user-name" >
                         <div class="user-type" >
                             <div> O </div>
@@ -28,7 +28,7 @@
                     </div>
                     <div class="score score_o"> {{ game.gamers.o.score }}</div>
                 </div>
-                <div class="user" @mouseover="mouseOver" @mouseout="mouseOut">
+                <div class="user_x" @mouseover="mouseOver" @mouseout="mouseOut">
                       <div class="user-name" >
                         <div class="user-type" >
                             <div> X </div>
@@ -43,11 +43,13 @@
                     <div v-for="(cell, x) of row" class="cell"
                         :class="{
                             'cell-winner': isCellWinner(x,y), 
-                            'cell-other' : isCellNotWinner(x,y) 
+                            'cell-other' : isCellNotWinner(x,y),
+                            'cell-highlight': isCheckCells(x,y)
                         }"
                         @mouseover="mouseOver" 
                         @mouseout="mouseOut" 
                         @click="next_step"
+
                         :x="x"
                         :y="y"
                     >{{cell}}</div>
@@ -59,6 +61,7 @@
                 <div v-else                         class="state"> Выиграл {{game.winner}}</div>
 
                 <div v-if="game.winner != ''"><button @click="game.reset()" class="reset"> Заново </button></div>
+                <div><button @click="showTakenCells()"> Показать занятые ячейки </button></div>
             </div>
         </div>
         <div id="chat" ></div>
@@ -67,7 +70,8 @@
         var app = new Vue({
             el: '#container',
             data: {
-                game: game
+                game: game,
+                isHighlight: false
             },
             methods: {
                 mouseOver: function(event) { $(event.currentTarget).addClass('hover') },
@@ -77,6 +81,7 @@
                         event.currentTarget.attributes.x.value,
                         event.currentTarget.attributes.y.value
                     ])
+                    this.isHighlight = false
                 },
                 isCellWinner: function(x,y) { 
                     return (this.game.winner == 'x' || this.game.winner == 'o') && this.game.win_template[y][x] == '1'
@@ -84,6 +89,14 @@
                 isCellNotWinner: function(x,y) { 
                     return (this.game.winner == 'x' || this.game.winner == 'o') && this.game.win_template[y][x] != '1'
                 },
+                isCheckCells: function(x,y) {
+                    if(this.isHighlight == true){
+                     return(this.game.field[y][x] == 'x' || this.game.field[y][x] == 'o')}
+                    return false
+                },
+                showTakenCells: function() {
+                    this.isHighlight = true
+                }
             },
         })
     </script> 
