@@ -1,91 +1,110 @@
-<!doctype html>
+<!DOCTYPE html>
 
 <html lang="en">
-<head>
-    <meta charset="utf-8">
+  <head>
+    <meta charset="utf-8" />
     <title>XO</title>
-    <meta name="description" content="The HTML5 Herald">
-    <meta name="author" content="SitePoint">
+    <meta name="description" content="The HTML5 Herald" />
+    <meta name="author" content="SitePoint" />
 
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css" />
     <script src="jquery.js"></script>
     <script src="game.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-</head>
-<body style="margin: 0">
-    <style>
-    </style>
+  </head>
+  <body style="margin: 0;">
+    <style></style>
     <div id="app-xo">
-        <div id="dashboard" ></div>
-        <div id="container" >
-            <div class="header" >
-                <div class="user" >
-                    <div class="user-name" >
-                        <div class="user-type" >
-                            <div> O </div>
-                        </div>
-                        <div class="name name_o"> {{ game.gamers.o.name }} </div>
-                    </div>
-                    <div class="score score_o"> {{ game.gamers.o.score }}</div>
-                </div>
-                <div class="user" >
-                    <div class="user-name" >
-                        <div class="user-type" >
-                            <div> X </div>
-                        </div>
-                        <div class="name name_x" >{{ game.gamers.x.name }}</div>
-                    </div>
-                    <div class="score score_x"> {{ game.gamers.x.score }}</div>
-                </div>
+      <div id="dashboard"></div>
+      <div id="container">
+        <div class="header">
+          <div class="user" @mouseover="mouseOver" @mouseout="mouseOut">
+            <div class="user-name" :class="{'winner': isWinner('o') }">
+              <div class="user-type">
+                <div>O</div>
+              </div>
+              <div class="name name_o">{{ game.gamers.o.name }}</div>
             </div>
-            <div class="field">
-                <div v-for="(row, y) of game.field" class="row">
-                    <div v-for="(cell, x) of row" class="cell"
-                        :class="{
-                            'cell-winner': isCellWinner(x,y), 
+            <div class="score score_o">{{ game.gamers.o.score }}</div>
+          </div>
+          <div class="user" @mouseover="mouseOver" @mouseout="mouseOut">
+            <div class="user-name" :class="{'winner': isWinner('x') }">
+              <div class="user-type">
+                <div>X</div>
+              </div>
+              <div class="name name_x">{{ game.gamers.x.name }}</div>
+            </div>
+            <div class="score score_x">{{ game.gamers.x.score }}</div>
+          </div>
+        </div>
+        <div class="field">
+          <div v-for="(row, y) of game.field" class="row">
+            <div
+              v-for="(cell, x) of row"
+              class="cell"
+              :class="{
+                            'winner': isCellWinner(x,y), 
                             'cell-other' : isCellNotWinner(x,y) 
                         }"
-                        @mouseover="mouseOver" 
-                        @mouseout="mouseOut" 
-                        @click="next_step"
-                        :x="x"
-                        :y="y"
-                    >{{cell}}</div>
-                </div>
+              @mouseover="mouseOver"
+              @mouseout="mouseOut"
+              @click="next_step"
+              :x="x"
+              :y="y"
+            >
+              {{cell}}
             </div>
-            <div class="footer" >            
-                <div v-if     ="game.winner ==  ''" class="state"> Ход {{game.state}}</div>
-                <div v-else-if="game.winner == '-'" class="state"> Ничья </div>
-                <div v-else                         class="state"> Выиграл {{game.winner}}</div>
-
-                <div v-if="game.winner != ''"><button @click="game.reset()" class="reset"> Заново </button></div>
-            </div>
+          </div>
         </div>
-        <div id="chat" ></div>
+        <div class="footer">
+          <div v-if="game.winner ==  ''" class="state">Ход {{game.state}}</div>
+          <div v-else-if="game.winner == '-'" class="state">Ничья</div>
+          <div v-else class="state">Выиграл {{game.winner}}</div>
+
+          <div v-if="game.winner != ''">
+            <button @click="game.reset()" class="reset">Заново</button>
+          </div>
+        </div>
+      </div>
+      <div id="chat"></div>
     </div>
     <script>
-        var app = new Vue({
-            el: '#container',
-            data: {
-                game: game
-            },
-            methods: {
-                mouseOver: function(event) { $(event.currentTarget).addClass('hover') },
-                mouseOut : function(event) { $(event.currentTarget).removeClass('hover') },
-                next_step: function(event) {
-                    game.do([
-                        event.currentTarget.attributes.x.value,
-                        event.currentTarget.attributes.y.value
-                    ])
-                },
-                isCellWinner: function(x,y) { 
-                    return (this.game.winner == 'x' || this.game.winner == 'o') && this.game.win_template[y][x] == '1'
-                },
-                isCellNotWinner: function(x,y) { 
-                    // TODO: 
-                },
-            },
-        })
-    </script> 
-</body>
+      var app = new Vue({
+        el: "#container",
+        data: {
+          game: game,
+        },
+        methods: {
+          mouseOver: function (event) {
+            $(event.currentTarget).addClass("hover");
+          },
+          mouseOut: function (event) {
+            $(event.currentTarget).removeClass("hover");
+          },
+          next_step: function (event) {
+            game.do([
+              event.currentTarget.attributes.x.value,
+              event.currentTarget.attributes.y.value,
+            ]);
+          },
+          isCellWinner: function (x, y) {
+            return (
+              (this.game.winner == "x" || this.game.winner == "o") &&
+              this.game.win_template[y][x] == "1"
+            );
+          },
+          isCellNotWinner: function (x, y) {
+            return (
+              (this.game.winner == "x" || this.game.winner == "o") &&
+              this.game.win_template[y][x] != "1"
+            );
+          },
+
+          isWinner: function (user) {
+            return this.game.winner == user;
+          },
+        },
+      });
+    </script>
+  </body>
 </html>
