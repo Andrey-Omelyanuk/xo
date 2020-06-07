@@ -1,4 +1,4 @@
-var game = {
+let game = {
     gamers: {
         o: {
             name: 'Andrey',
@@ -77,13 +77,13 @@ var game = {
     check_winner: function() {
         for(var template of this.win_templates) {
             if (this.match_template(template, 'o')) {
-                this.win_template = template
+                (<any>this.win_template) = template
                 this.winner = 'o'
                 this.gamers.o.score++
                 return
             }
             if (this.match_template(template, 'x')) {
-                this.win_template = template
+                (<any>this.win_template) = template
                 this.winner = 'x'
                 this.gamers.x.score++
                 return
@@ -126,3 +126,5 @@ var game = {
         this.winner = ''
     }
 }
+
+export default game

@@ -1,21 +1,4 @@
-<!doctype html>
-
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>XO</title>
-    <meta name="description" content="The HTML5 Herald">
-    <meta name="author" content="SitePoint">
-
-    <link rel="stylesheet" href="styles.css">
-    <script src="jquery.js"></script>
-    <script src="game.js"></script>
-    <script src="class.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-</head>
-<body style="margin: 0">
-    <style>
-    </style>
+<template>
     <div id="app-xo">
         <div id="dashboard" ></div>
         <div id="container" >
@@ -40,15 +23,15 @@
                 </div>
             </div>
             <div class="field">
-                <div v-for="(row, y) of game.field" class="row">
-                    <div v-for="(cell, x) of row" class="cell"
+                <div v-for="(row, y) of game.field" :key="row" class="row">
+                    <div v-for="(cell, x) of row" :key="cell" class="cell"
                         :class="{
                             'cell-winner': isCellWinner(x,y), 
                             'cell-other' : isCellNotWinner(x,y) 
                         }"
                         @mouseover="mouseOver" 
                         @mouseout="mouseOut" 
-                        @click="next_step"
+                        @click="nextStep"
                         :x="x"
                         :y="y"
                     >{{cell}}</div>
@@ -64,29 +47,39 @@
         </div>
         <div id="chat" ></div>
     </div>
-    <script>
-        var app = new Vue({
-            el: '#container',
-            data: {
-                game: game
-            },
-            methods: {
-                mouseOver: function(event) { $(event.currentTarget).addClass('hover') },
-                mouseOut : function(event) { $(event.currentTarget).removeClass('hover') },
-                next_step: function(event) {
-                    game.do([
-                        event.currentTarget.attributes.x.value,
-                        event.currentTarget.attributes.y.value
-                    ])
-                },
-                isCellWinner: function(x,y) { 
-                    return (this.game.winner == 'x' || this.game.winner == 'o') && this.game.win_template[y][x] == '1'
-                },
-                isCellNotWinner: function(x,y) { 
-                    // TODO: 
-                },
-            },
-        })
-    </script> 
-</body>
-</html>
+</template>
+
+<script lang="ts">
+import Vue from 'vue';
+import game from '../game'
+import { $ } from 'jquery'
+
+
+export default Vue.extend({
+    data: () => { 
+        return {
+            game: game
+        }
+    },
+    methods: {
+        mouseOver: function(event) { $(event.currentTarget).addClass('hover') },
+        mouseOut : function(event) { $(event.currentTarget).removeClass('hover') },
+        nextStep: function(event) {
+            game.do([
+                event.currentTarget.attributes.x.value,
+                event.currentTarget.attributes.y.value
+            ])
+        },
+        isCellWinner: function(x,y) { 
+            return (this.game.winner == 'x' || this.game.winner == 'o') && (<any>this.game.win_template)[y][x] == '1'
+        },
+        isCellNotWinner: function(x,y) { 
+            // TODO: 
+        },
+    }
+});
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped lang="stylus">
+</style>
